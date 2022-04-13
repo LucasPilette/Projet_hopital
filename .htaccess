@@ -1,0 +1,35 @@
+# links follow
+Options +FollowSymlinks 
+# rewrite Apache activate
+RewriteEngine On
+
+# /accueil -> home-controller.php
+RewriteRule ^accueil$ controllers/home-controller.php [L]
+
+# /ajout-patient -> ajout-patient-controller.php
+RewriteRule ^ajout-patient$ controllers/ajout-patient-controller.php [L]
+
+# /rendez-vous -> rendez-vous-controller.php
+RewriteRule ^rendez-vous$ controllers/rendez-vous-controller.php [L]
+
+# /liste-patient -> liste-patient-controller.php
+RewriteRule ^liste-patient$ controllers/liste-patient-controller.php [L]
+
+# /profil-patient -> profil-patient-controller.php
+RewriteRule ^profil-patient$ controllers/profil-patient-controller.php [L]
+
+# /modifier-patient -> modifier-patient-controller.php
+RewriteRule ^modifier-patient$ controllers/modifier-patient-controller.php [L]
+
+# /rendez-vous -> rendez-vous-controller.php
+RewriteRule ^rendez-vous$ controllers/rendez-vous-controller.php [L]
+
+# /liste-rendez-vous -> liste-rendez-vous-controller.php
+RewriteRule ^liste-rendez-vous$ controllers/liste-rendez-vous-controller.php [L]
+
+# /info-rendez-vous -> info-rendez-vous-controller.php
+RewriteRule ^info-rendez-vous$ controllers/info-rendez-vous-controller.php [L]
+
+# /modifier-rendez-vous -> modifier-rendez-vous-controller.php
+RewriteRule ^modifier-rendez-vous$ controllers/modifier-rendez-vous-controller.php [L]
+
