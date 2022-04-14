@@ -196,14 +196,22 @@ class Patient {
      * @param mixed $pdo
      * 
      */
-    public function getAll(){
+    public static function getAll(){
         $sql = 
         'SELECT * 
         FROM patients ';
-        $sth = $this->_pdo->prepare($sql);
-        $sth ->execute();
-        $patients = $sth->fetchAll(); 
-        return $patients;
+
+        try{
+            $sth = DataBase::dbConnect()->prepare($sql);
+            $sth ->execute();
+            if(!$sth){
+                throw new PDOException();
+            }
+            $patients = $sth->fetchAll(); 
+            return $patients;
+        } catch(PDOException $e){
+            return [];
+        }
     }
 
 
@@ -235,6 +243,21 @@ class Patient {
         $sth->bindValue(':id', $id, PDO::PARAM_INT);
         $sth ->execute();
         $patients = $sth->fetch(); 
+        return $patients;
+    }
+
+    public function getAppointments($id){
+        $sth = $this->_pdo->prepare(
+            'SELECT appointments.id AS appointmentsId, appointments.dateHour AS hour, patients.id AS patientsId, patients.lastname AS lastname, patients.firstname AS firstname,
+            patients.mail AS mail
+            FROM appointments
+            JOIN patients
+            ON appointments.idPatients = patients.id
+            WHERE appointments.idPatients = :id
+            ORDER BY appointments.dateHour');
+        $sth->bindValue(':id', $id, PDO::PARAM_INT);
+        $sth ->execute();
+        $patients = $sth->fetchAll(); 
         return $patients;
     }
 }

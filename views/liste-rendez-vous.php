@@ -21,7 +21,7 @@
             <?php
             foreach($appointmentList as $appointment){
                 echo '<tr><td>'.$appointment->appointmentsId.'</td><td>'.date('j M Y', strtotime($appointment->hour)).'</td><td>'.date('H:i', strtotime($appointment->hour))
-                .'</td><td>'.$appointment->lastname.'</td><td>'.$appointment->firstname.'</td><td>'.$appointment->mail.'</td><td><a href="/info-rendez-vous?id='.$appointment->appointmentsId.'"> Plus d\'informations </a></td></tr>';
+                .'</td><td>'.$appointment->lastname.'</td><td>'.$appointment->firstname.'</td><td>'.$appointment->mail.'</td><td class ="activeCase" ><a href="/info-rendez-vous?id='.$appointment->appointmentsId.'"> Plus d\'informations </a></td></tr>';
             }
             
             ?>

@@ -96,7 +96,7 @@ class Appointments {
      * @param mixed $pdo
      * 
      */
-    public function getAll(){
+    public static function getAll(){
         $sql = 
         'SELECT appointments.id AS appointmentsId, appointments.dateHour AS hour, patients.id AS patientsId, patients.lastname AS lastname, patients.firstname AS firstname,
         patients.mail AS mail
@@ -105,7 +105,7 @@ class Appointments {
         ON appointments.idPatients = patients.id
         ORDER BY appointments.id
         ';
-        $sth = $this->_pdo->prepare($sql);
+        $sth = DataBase::dbConnect()->prepare($sql);
         $sth ->execute();
         $appointments = $sth->fetchAll(); 
         return $appointments;

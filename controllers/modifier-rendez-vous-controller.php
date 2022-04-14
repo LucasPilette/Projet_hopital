@@ -58,13 +58,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                 $errors['shedule'] = 'Veuillez choisir un créneau valide';
             }
 
-
-
-    if(empty($errors)){
-        $meeting = new Appointments($schedule,$patientValue);
-        $meeting->add();
-    }
 }
+
+
 
 
 
@@ -76,7 +72,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && empty($errors)){
     $id = trim(filter_input(INPUT_GET,'id',FILTER_SANITIZE_SPECIAL_CHARS));
     $patient = new Appointments($schedule,$patientValue);
     $patient->modifyOne($id);
-    header('location: /profil-patient?id='.$id);
+    header('location: /info-rendez-vous?id='.$id);
 } else {
     include(dirname(__FILE__).'/../views/modifier-rendez-vous.php');
 }

@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" id="profile">
     <div class="cardUser">
         <div class="textCard">
             <div> <p><span class="elemCard">Prénom : </span> <?=$patientAccount->firstname?></p></div>
@@ -11,6 +11,29 @@
         <div class="pictureCard">
             <img src="/public/assets/src/User-icon.png" alt="">
         </div>
+    </div>
+    <div class="appList">
+        <?php if(!empty($appList)) :?>
+        <h2>Rendez-vous :</h2>
+    <table>
+        <thead>
+            <th>ID</th>
+            <th>Date</th>
+            <th>Heure</th>
+        </thead>
+        <tbody>
+            <?php
+                foreach($appList as $app){
+                    echo '<tr><td>'.$app->appointmentsId.'</td><td>'.date('j M Y', strtotime($app->hour)).'</td><td>'.
+                    date('H:i', strtotime($app->hour)).'</td></tr>';
+                }
+            ?> 
+        </tbody>
+    </table>
+    <?php endif; ?>
+    <?php if(empty($appList)) :?>
+        <h2>Pas de rendez-vous</h2>
+    <?php endif;?>
     </div>
 </div>
 

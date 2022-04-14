@@ -5,7 +5,7 @@ require_once(dirname(__FILE__).'/../models/Appointments.php');
 require_once(dirname(__FILE__).'/../config/PDO/PDO_init.php');
 
 $appointment = new Appointments();
-$appointmentList = $appointment->getAll();
+$appointmentList = $appointment::getAll();
 
 
 // AFFICHAGE DES VUES

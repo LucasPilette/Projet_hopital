@@ -2,7 +2,7 @@
     <form action="<?=htmlspecialchars($_SERVER['PHP_SELF'])?>?id=<?=$_GET['id']?>" method="post" enctype="multipart/form-data">
 
         <label for="date">Date</label>
-        <input type="date" name="date" id="date" value="<?=$appointmentOne->hour ?? '' ?>">
+        <input type="date" name="date" id="date" value="<?=date('Y-m-d', strtotime($appointmentOne->hour)) ?? '' ?>">
         <span class="error"><?= $errors['date'] ?? '' ?></span>
 
         <label for="schedule"> Heure (Ouvert de 08h du matin à 20h)</label>

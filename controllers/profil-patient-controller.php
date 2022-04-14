@@ -10,6 +10,8 @@ if(!empty($_GET)){
     $id = trim(filter_input(INPUT_GET,'id',FILTER_SANITIZE_SPECIAL_CHARS));
     $patient = new Patient();
     $patientAccount = $patient->getOne($id);
+
+    $appList = $patient->getAppointments($id);
 }
 
 // AFFICHAGE DES VUES
