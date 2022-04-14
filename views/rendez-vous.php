@@ -30,6 +30,6 @@
         </select>
         <span class="error"><?= $errors['patient'] ?? '' ?></span>
 
-        <input type="submit" value="Ajouter patient" class="submit">
+        <input type="submit" value="Ajouter rendez-vous" class="submit">
     </form>
 </div>

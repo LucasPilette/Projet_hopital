@@ -222,7 +222,8 @@ class Patient {
      * @return [type]
      */
     public function getOne($id){
-        $sth = $this->_pdo->prepare('SELECT * FROM patients WHERE patients.id = :id');
+        $sql = 'SELECT * FROM patients WHERE patients.id = :id';
+        $sth =  DataBase::dbConnect()->prepare($sql);
         $sth->bindValue(':id',$id, PDO::PARAM_INT);
         $sth ->execute();
         $patients = $sth->fetch(); 
@@ -231,10 +232,11 @@ class Patient {
     
 
     public function modifyOne($id){
-        $sth = $this->_pdo->prepare(
-            'UPDATE patients  
-            SET lastname = :newLastname, firstname = :newFirstname, birthdate = :newBirthDate, phone = :newPhone, mail = :newMail
-            WHERE id = :id');
+        $sql = 
+        'UPDATE patients  
+        SET lastname = :newLastname, firstname = :newFirstname, birthdate = :newBirthDate, phone = :newPhone, mail = :newMail
+        WHERE id = :id';
+        $sth =  DataBase::dbConnect()->prepare($sql);
         $sth->bindValue(':newLastname', $this->getLastname(), PDO::PARAM_STR);
         $sth->bindValue(':newFirstname', $this->getFirstname(), PDO::PARAM_STR);
         $sth->bindValue(':newBirthDate', $this->getBirthDate(), PDO::PARAM_STR);
@@ -247,17 +249,29 @@ class Patient {
     }
 
     public function getAppointments($id){
-        $sth = $this->_pdo->prepare(
-            'SELECT appointments.id AS appointmentsId, appointments.dateHour AS hour, patients.id AS patientsId, patients.lastname AS lastname, patients.firstname AS firstname,
-            patients.mail AS mail
-            FROM appointments
-            JOIN patients
-            ON appointments.idPatients = patients.id
-            WHERE appointments.idPatients = :id
-            ORDER BY appointments.dateHour');
+        $sql = 
+        'SELECT appointments.id AS appointmentsId, appointments.dateHour AS hour, patients.id AS patientsId, patients.lastname AS lastname, patients.firstname AS firstname,
+        patients.mail AS mail
+        FROM appointments
+        JOIN patients
+        ON appointments.idPatients = patients.id
+        WHERE appointments.idPatients = :id
+        ORDER BY appointments.dateHour';
+        $sth =  DataBase::dbConnect()->prepare($sql);
         $sth->bindValue(':id', $id, PDO::PARAM_INT);
         $sth ->execute();
         $patients = $sth->fetchAll(); 
+        return $patients;
+    }
+
+
+    public function deletePatient($id){
+        $sql = 'DELETE FROM patients
+        WHERE patients.id = :id';
+        $sth = DataBase::dbConnect()->prepare($sql);
+        $sth->bindValue(':id', $id, PDO::PARAM_INT);
+        $sth ->execute();
+        $patients = $sth->fetch(); 
         return $patients;
     }
 }

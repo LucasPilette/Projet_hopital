@@ -127,7 +127,7 @@ class Appointments {
         ON appointments.idPatients = patients.id
         WHERE appointments.id = :id
         ';
-        $sth = $this->_pdo->prepare($sql);
+        $sth = DataBase::dbConnect()->prepare($sql);
         $sth->bindValue(':id',$id, PDO::PARAM_INT);
         $sth ->execute();
         $patients = $sth->fetch(); 
@@ -135,7 +135,7 @@ class Appointments {
     }
 
     public function modifyOne($id){
-        $sth = $this->_pdo->prepare(
+        $sth = DataBase::dbConnect()->prepare(
             'UPDATE appointments  
             SET dateHour = :dateHour, idPatients = :idPatients
             WHERE id = :id');
@@ -145,5 +145,27 @@ class Appointments {
         $sth ->execute();
         $patients = $sth->fetch(); 
         return $patients;
+    }
+
+    public function deleteOne($id){
+        $sql = 
+        'DELETE FROM appointments  
+        WHERE appointments.id = :id';
+        $sth = DataBase::dbConnect()->prepare($sql);
+        $sth->bindValue(':id', $id, PDO::PARAM_INT);
+        $sth ->execute();
+        $app = $sth->fetch(); 
+        return $app;
+    }
+
+    public function deleteAllFromPatient($id){
+        $sql = 
+        'DELETE FROM appointments  
+        WHERE appointments.idPatients = :id';
+        $sth = DataBase::dbConnect()->prepare($sql);
+        $sth->bindValue(':id', $id, PDO::PARAM_INT);
+        $sth ->execute();
+        $app = $sth->fetch(); 
+        return $app;
     }
 }

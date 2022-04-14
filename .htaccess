@@ -33,3 +33,9 @@ RewriteRule ^info-rendez-vous$ controllers/info-rendez-vous-controller.php [L]
 # /modifier-rendez-vous -> modifier-rendez-vous-controller.php
 RewriteRule ^modifier-rendez-vous$ controllers/modifier-rendez-vous-controller.php [L]
 
+# /supprimer-rendez-vous -> supprimer-rendez-vous-controller.php
+RewriteRule ^supprimer-rendez-vous$ controllers/supprimer-rendez-vous-controller.php [L]
+
+# /supprimer-patient -> supprimer-patient-controller.php
+RewriteRule ^supprimer-patient$ controllers/supprimer-patient-controller.php [L]
+

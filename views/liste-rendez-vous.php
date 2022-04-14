@@ -16,15 +16,23 @@
             <th>Prénom</th>
             <th>Mail</th>
             <th></th>
+            <th></th>
         </thead>
         <tbody>
-            <?php
-            foreach($appointmentList as $appointment){
-                echo '<tr><td>'.$appointment->appointmentsId.'</td><td>'.date('j M Y', strtotime($appointment->hour)).'</td><td>'.date('H:i', strtotime($appointment->hour))
-                .'</td><td>'.$appointment->lastname.'</td><td>'.$appointment->firstname.'</td><td>'.$appointment->mail.'</td><td class ="activeCase" ><a href="/info-rendez-vous?id='.$appointment->appointmentsId.'"> Plus d\'informations </a></td></tr>';
-            }
+            <?php foreach($appointmentList as $appointment){ ?>
+                <tr>
+                    <td><?=$appointment->appointmentsId?></td>
+                    <td><?=date('j M Y', strtotime($appointment->hour))?></td>
+                    <td><?=date('H:i', strtotime($appointment->hour))?></td>
+                    <td><?=$appointment->lastname?></td>
+                    <td><?=$appointment->firstname?></td><td><?=$appointment->mail?></td>
+                    <td class ="activeCase" ><a href="/info-rendez-vous?id=<?=$appointment->appointmentsId?>"> Plus d'informations </a></td>
+                    <td class="delete"><a href="/supprimer-rendez-vous?id=<?=$appointment->appointmentsId?>">Supprimer le RDV</a> </td>
+                </tr>
+
+            <?php } ?>
             
-            ?>
+            
         </tbody>
     </table>
 </div>

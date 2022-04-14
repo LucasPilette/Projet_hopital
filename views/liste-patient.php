@@ -17,15 +17,21 @@
             <th>Téléphone</th>
             <th>Email</th>
             <th></th>
+            <th></th>
         </thead>
         <tbody>
-            <?php
-            foreach($patientList as $patient){
-                echo '<tr><td>'.$patient->id.'</td><td>'.$patient->firstname.'</td><td>'.$patient->lastname.'</td><td>'.date('j M Y', strtotime($patient->birthdate)).
-                '</td><td><a href="tel:'.$patient->phone.'">'.$patient->phone.'</a></td><td><a href="mailto:'.$patient->mail.'">'.$patient->mail.'</a></td><td class ="activeCase"><a href="/profil-patient?id='.$patient->id.'"> Voir le profil </a></td></tr>';
-            }
-            
-            ?>
+            <?php foreach($patientList as $patient){ ?>
+                <tr>
+                    <td><?=$patient->id?></td>
+                    <td><?=$patient->firstname?></td>
+                    <td><?=$patient->lastname?></td>
+                    <td><?=date('j M Y', strtotime($patient->birthdate))?></td>
+                    <td><a href="tel:<?=$patient->phone?>"><?=$patient->phone?></a></td>
+                    <td><a href="mailto:<?=$patient->mail?>"><?=$patient->mail?></a></td>
+                    <td class ="activeCase"><a href="/profil-patient?id=<?=$patient->id?>"> Voir le profil </a></td>
+                    <td class="delete"><a href="/supprimer-patient?id=<?=$patient->id?>">Supprimer le patient</a> </td>
+            </tr>
+            <?php } ?>
         </tbody>
     </table>
 </div>
