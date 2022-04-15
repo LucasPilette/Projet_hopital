@@ -160,7 +160,7 @@ class Patient {
     
     public function add():bool{
         try{
-            $sth = $this->_pdo->prepare('INSERT INTO patients (lastname,firstname,birthdate,phone,mail) VALUES (:lastname,:firstname,:birthDate,:phone,:mail)');
+            $sth = DataBase::dbConnect()->prepare('INSERT INTO `patients` (`lastname`,`firstname`,`birthdate`,`phone`,`mail`) VALUES (:lastname,:firstname,:birthDate,:phone,:mail)');
             $sth->bindValue(':lastname', $this->getLastname(), PDO::PARAM_STR);
             $sth->bindValue(':firstname', $this->getFirstname(), PDO::PARAM_STR);
             $sth->bindValue(':birthDate', $this->getBirthDate(), PDO::PARAM_STR);
@@ -175,7 +175,7 @@ class Patient {
 
     public static function isExist(string $mail):bool{
         try{
-            $sql = "SELECT mail FROM patients WHERE mail = :mail";
+            $sql = "SELECT `mail` FROM `patients` WHERE `mail` = :mail; ";
             $sth = DataBase::dbConnect()-> prepare($sql);
             $sth->bindValue(':mail', $mail, PDO::PARAM_STR);
             $sth->execute();
@@ -196,14 +196,20 @@ class Patient {
      * @param mixed $pdo
      * 
      */
-    public static function getAll(){
+    public static function getAll($offset = 0,$perPage= 10,$search = ''){
         $sql = 
-        'SELECT * 
-        FROM patients ';
-
+        'SELECT *
+        FROM `patients`
+        WHERE `firstname` LIKE :search OR `lastname` LIKE :search
+        LIMIT :offset,:perPage;
+        ';
         try{
             $sth = DataBase::dbConnect()->prepare($sql);
+            $sth->bindValue(':search', '%'.$search.'%', PDO::PARAM_STR);
+            $sth->bindValue(':offset', $offset, PDO::PARAM_INT);
+            $sth->bindValue(':perPage', $perPage, PDO::PARAM_INT);
             $sth ->execute();
+            
             if(!$sth){
                 throw new PDOException();
             }
@@ -215,27 +221,51 @@ class Patient {
     }
 
 
+    public static function total($search =''){
+        $sql = 
+        'SELECT *
+        FROM `patients`
+        WHERE `firstname` LIKE :search OR `lastname` LIKE :search;
+        ';
+        $sth = DataBase::dbConnect()->prepare($sql);
+        $sth->bindValue(':search', '%'.$search.'%', PDO::PARAM_STR);
+        $sth ->execute();
+        $total = $sth->rowCount();
+        return $total;
+    }
+
+
+    
+
+
     /**
      * @param mixed $pdo
      * @param int $id
      * 
      * @return [type]
      */
-    public function getOne($id){
-        $sql = 'SELECT * FROM patients WHERE patients.id = :id';
-        $sth =  DataBase::dbConnect()->prepare($sql);
-        $sth->bindValue(':id',$id, PDO::PARAM_INT);
-        $sth ->execute();
-        $patients = $sth->fetch(); 
-        return $patients;
+    public function getOne(int $id):object{
+        $sql = 'SELECT * FROM `patients` WHERE `patients`.`id` = :id;';
+        try{
+            $sth =  DataBase::dbConnect()->prepare($sql);
+            $sth->bindValue(':id',$id, PDO::PARAM_INT);
+            $verif = $sth ->execute();
+            if(!$verif){
+                throw new PDOException();
+            } else {
+                return $sth->fetch();
+            }
+        } catch(PDOException $e){
+            return $e;
+        }
     }
     
 
     public function modifyOne($id){
         $sql = 
-        'UPDATE patients  
-        SET lastname = :newLastname, firstname = :newFirstname, birthdate = :newBirthDate, phone = :newPhone, mail = :newMail
-        WHERE id = :id';
+        'UPDATE `patients`  
+        SET `lastname` = :newLastname, `firstname` = :newFirstname, `birthdate` = :newBirthDate, `phone` = :newPhone, `mail` = :newMail
+        WHERE `id` = :id';
         $sth =  DataBase::dbConnect()->prepare($sql);
         $sth->bindValue(':newLastname', $this->getLastname(), PDO::PARAM_STR);
         $sth->bindValue(':newFirstname', $this->getFirstname(), PDO::PARAM_STR);
@@ -250,13 +280,13 @@ class Patient {
 
     public function getAppointments($id){
         $sql = 
-        'SELECT appointments.id AS appointmentsId, appointments.dateHour AS hour, patients.id AS patientsId, patients.lastname AS lastname, patients.firstname AS firstname,
-        patients.mail AS mail
-        FROM appointments
-        JOIN patients
-        ON appointments.idPatients = patients.id
-        WHERE appointments.idPatients = :id
-        ORDER BY appointments.dateHour';
+        'SELECT `appointments`.`id` AS appointmentsId, `appointments`.`dateHour` AS hour, `patients`.`id` AS patientsId, `patients`.`lastname` AS lastname, `patients`.`firstname` AS firstname,
+        `patients`.`mail` AS mail
+        FROM `appointments`
+        JOIN `patients`
+        ON `appointments`.`idPatients` = `patients`.`id`
+        WHERE `appointments`.`idPatients` = :id
+        ORDER BY `appointments`.`dateHour`;';
         $sth =  DataBase::dbConnect()->prepare($sql);
         $sth->bindValue(':id', $id, PDO::PARAM_INT);
         $sth ->execute();
@@ -266,12 +296,15 @@ class Patient {
 
 
     public function deletePatient($id){
-        $sql = 'DELETE FROM patients
-        WHERE patients.id = :id';
+        $sql = 'DELETE FROM `patients`
+        WHERE `patients`.`id` = :id';
         $sth = DataBase::dbConnect()->prepare($sql);
         $sth->bindValue(':id', $id, PDO::PARAM_INT);
         $sth ->execute();
         $patients = $sth->fetch(); 
         return $patients;
     }
+
+
+
 }

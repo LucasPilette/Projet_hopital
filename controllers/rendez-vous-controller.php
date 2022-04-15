@@ -5,6 +5,10 @@ require_once(dirname(__FILE__).'/../models/Patient.php');
 require_once(dirname(__FILE__).'/../models/Appointments.php');
 require_once(dirname(__FILE__).'/../config/PDO/PDO_init.php');
 
+$test = new Patient();
+$total = Patient::total();
+$patientList = $test->getAll(0,$total);
+
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
     // CHECK PATIENT
@@ -57,9 +61,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         $meeting->add();
     }
 }
-
-$test = new Patient();
-$patientList = $test->getAll();
 
 
 // AFFICHAGE DES VUES

@@ -35,4 +35,11 @@
             
         </tbody>
     </table>
+    <div class="pagination">
+        <?php 
+        for($count = 1; $count <= $pages ; $count++){
+            $class = $page == $count ? 'active' : '';?>
+            <a href="?page=<?=$count?>" class="<?=$class?>"><?=$count?></a>
+        <?php } ?>
+    </div>
 </div>

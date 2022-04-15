@@ -7,7 +7,7 @@ require_once(dirname(__FILE__).'/../models/Patient.php');
 
 
 if(!empty($_GET)){
-    $id = trim(filter_input(INPUT_GET,'id',FILTER_SANITIZE_SPECIAL_CHARS));
+    $id = intval(filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT));
     $patient = new Patient();
     $patientAccount = $patient->getOne($id);
 

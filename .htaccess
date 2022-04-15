@@ -39,3 +39,6 @@ RewriteRule ^supprimer-rendez-vous$ controllers/supprimer-rendez-vous-controller
 # /supprimer-patient -> supprimer-patient-controller.php
 RewriteRule ^supprimer-patient$ controllers/supprimer-patient-controller.php [L]
 
+# /ajout-patient-rendez-vous -> ajout-patient-rendez-vous-controller.php
+RewriteRule ^ajout-patient-rendez-vous$ controllers/ajout-patient-rendez-vous-controller.php [L]
+

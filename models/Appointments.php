@@ -82,7 +82,7 @@ class Appointments {
     
     public function add():bool{
         try{
-            $sth = $this->_pdo->prepare('INSERT INTO appointments (dateHour,idPatients) VALUES (:dateHour,:idPatients)');
+            $sth = $this->_pdo->prepare('INSERT INTO `appointments` (`dateHour`,`idPatients`) VALUES (:dateHour,:idPatients);');
             $sth->bindValue(':dateHour', $this->getdateHour(), PDO::PARAM_STR);
             $sth->bindValue(':idPatients', $this->getidPatients(), PDO::PARAM_STR);
             return $sth->execute();
@@ -96,19 +96,29 @@ class Appointments {
      * @param mixed $pdo
      * 
      */
-    public static function getAll(){
+    public static function getAll($offset = 0,$perPage= 10){
         $sql = 
-        'SELECT appointments.id AS appointmentsId, appointments.dateHour AS hour, patients.id AS patientsId, patients.lastname AS lastname, patients.firstname AS firstname,
-        patients.mail AS mail
-        FROM appointments
-        JOIN patients
-        ON appointments.idPatients = patients.id
-        ORDER BY appointments.id
+        'SELECT `appointments`.`id` AS appointmentsId, `appointments`.`dateHour` AS hour, `patients`.`id` AS patientsId, `patients`.`lastname` AS lastname, `patients`.`firstname` AS firstname,
+        `patients`.`mail` AS mail
+        FROM `appointments`
+        JOIN `patients`
+        ON `appointments`.`idPatients` = patients.id
+        ORDER BY `appointments`.`dateHour`
+        LIMIT :offset,:perPage;
         ';
-        $sth = DataBase::dbConnect()->prepare($sql);
+        try{
+            $sth = DataBase::dbConnect()->prepare($sql);
+        $sth->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $sth->bindValue(':perPage', $perPage, PDO::PARAM_INT);
         $sth ->execute();
+        if(!$sth){
+            throw new PDOException();
+        }
         $appointments = $sth->fetchAll(); 
         return $appointments;
+        } catch(PDOException $e){
+            return [];
+        }
     }
 
 
@@ -120,12 +130,12 @@ class Appointments {
      */
     public function getOne($id){
         $sql = 
-        'SELECT appointments.id AS appointmentsId, appointments.dateHour AS hour, patients.id AS patientsId, patients.lastname AS lastname, patients.firstname AS firstname,
-        patients.mail AS mail
-        FROM appointments
-        JOIN patients
-        ON appointments.idPatients = patients.id
-        WHERE appointments.id = :id
+        'SELECT `appointments`.`id` AS appointmentsId, `appointments`.`dateHour` AS hour, `patients`.`id` AS patientsId, `patients`.`lastname` AS lastname, `patients`.`firstname` AS firstname,
+        `patients`.`mail` AS mail
+        FROM `appointments`
+        JOIN `patients`
+        ON `appointments`.`idPatients` = patients.id
+        WHERE `appointments`.`id` = :id;
         ';
         $sth = DataBase::dbConnect()->prepare($sql);
         $sth->bindValue(':id',$id, PDO::PARAM_INT);
@@ -136,9 +146,9 @@ class Appointments {
 
     public function modifyOne($id){
         $sth = DataBase::dbConnect()->prepare(
-            'UPDATE appointments  
-            SET dateHour = :dateHour, idPatients = :idPatients
-            WHERE id = :id');
+            'UPDATE `appointments`  
+            SET `dateHour` = :dateHour, `idPatients` = :idPatients
+            WHERE `id` = :id');
         $sth->bindValue(':dateHour', $this->getdateHour(), PDO::PARAM_STR);
         $sth->bindValue(':idPatients', $this->getidPatients(), PDO::PARAM_STR);
         $sth->bindValue(':id', $id, PDO::PARAM_INT);
@@ -149,8 +159,8 @@ class Appointments {
 
     public function deleteOne($id){
         $sql = 
-        'DELETE FROM appointments  
-        WHERE appointments.id = :id';
+        'DELETE FROM `appointments`  
+        WHERE `appointments`.`id` = :id;';
         $sth = DataBase::dbConnect()->prepare($sql);
         $sth->bindValue(':id', $id, PDO::PARAM_INT);
         $sth ->execute();
@@ -160,12 +170,23 @@ class Appointments {
 
     public function deleteAllFromPatient($id){
         $sql = 
-        'DELETE FROM appointments  
-        WHERE appointments.idPatients = :id';
+        'DELETE FROM `appointments`  
+        WHERE `appointments`.`idPatients` = :id;';
         $sth = DataBase::dbConnect()->prepare($sql);
         $sth->bindValue(':id', $id, PDO::PARAM_INT);
         $sth ->execute();
         $app = $sth->fetch(); 
         return $app;
+    }
+
+    public static function total(){
+        $sql = 
+        'SELECT *
+        FROM `appointments`
+        ';
+        $sth = DataBase::dbConnect()->prepare($sql);
+        $sth ->execute();
+        $total = $sth->rowCount();
+        return $total;
     }
 }
