@@ -82,7 +82,7 @@ class Appointments {
     
     public function add():bool{
         try{
-            $sth = $this->_pdo->prepare('INSERT INTO `appointments` (`dateHour`,`idPatients`) VALUES (:dateHour,:idPatients);');
+            $sth = DataBase::dbConnect()->prepare('INSERT INTO `appointments` (`dateHour`,`idPatients`) VALUES (:dateHour,:idPatients);');
             $sth->bindValue(':dateHour', $this->getdateHour(), PDO::PARAM_STR);
             $sth->bindValue(':idPatients', $this->getidPatients(), PDO::PARAM_STR);
             return $sth->execute();

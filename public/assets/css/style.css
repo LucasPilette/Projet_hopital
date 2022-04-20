@@ -157,6 +157,8 @@ body{
 
 /* TABLEAU */
 
+
+
 .container{
     display: flex;
     justify-content: center;
@@ -289,8 +291,29 @@ a{
 .searchBar{
     width: 100%;
     display: flex;
-    justify-content: end;
-    padding-right: 30%;
+    flex-direction: column;
+    align-items: end;
+    padding-right: 17%;
+}
+
+.searchBar>form{
+    width: 20%;
+}
+
+#suggestions{
+    list-style-type: none;
+    width: 100%;
+}
+#suggestions>li{
+    display: flex;
+    justify-content: start;
+    padding: 5px 10px;
+    background-color: #a9e8f8;
+}
+
+#suggestions>li:hover{
+    background-color: #20a9cb;
+    cursor: pointer;
 }
 
 .pagination{

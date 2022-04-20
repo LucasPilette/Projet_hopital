@@ -25,6 +25,21 @@ if(!empty($_POST)){
     $results = Patient::getAll($offset,$perPage,$search);
 }
 
+if(!empty($_GET["searchbox"]) ) 
+{   
+    // the query responsible for fetch matched data
+    $sql ="SELECT *
+    FROM patients 
+    WHERE firstname 
+    LIKE '" . $_GET["searchbox"] . "%' 
+    OR lastname LIKE '" . $_GET["searchbox"] . "%'
+    LIMIT 0,$perPage;";
+    $sth = DataBase::dbConnect()->prepare($sql);
+    $sth ->execute();
+    $results = $sth->fetchAll();
+    echo json_encode($results);
+    die;
+}
 
 
 // AFFICHAGE DES VUES

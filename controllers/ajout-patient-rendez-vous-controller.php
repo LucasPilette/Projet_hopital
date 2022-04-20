@@ -2,6 +2,7 @@
 
 // RECUPERATION DONNES PDO
 
+require_once(dirname(__FILE__).'/../config/constForm.php');
 require_once(dirname(__FILE__).'/../config/PDO/PDO_init.php');
 require_once(dirname(__FILE__).'/../models/Patient.php');
 require_once(dirname(__FILE__).'/../models/Appointments.php');
@@ -90,15 +91,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
             $errors['email'] = 'L\'email saisi est déjà utilisé.';
         }
     }
-    $patientValue = intval(filter_input(INPUT_POST, 'patient', FILTER_SANITIZE_NUMBER_INT));
-    if(empty($patientValue)){
-        $errors['patient'] = 'Veuillez sélectionner un patient associé au rendez-vous.';
-    } else {
-        $checkedPatient = filter_var($patientValue,FILTER_VALIDATE_INT);
-        if(!$checkedPatient){
-            $errors['patient'] = 'Veuillez sélectionner un patient valide.';
-        }
-    }
 
     // CHECK DATE
 
@@ -133,13 +125,29 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
 include(dirname(__FILE__).'/../views/templates/header.php');
 
+
 if($_SERVER['REQUEST_METHOD'] == 'POST' && empty($errors)){
-    $patient = new Patient($lastname,$firstname,$birthDate,$phone,$email);
-    $result = $patient->add();
-    $idPatient =$patient->getId();
-    $meeting = new Appointments($schedule,$idPatient);
-    $meeting->add();
-    header('location: /liste-patient');
+
+        $dbh = DataBase::dbConnect() ;
+
+        $dbh->beginTransaction();
+
+        $patient = new Patient($lastname,$firstname,$birthDate,$phone,$email);
+
+        $addPatient = $patient->add();
+
+        $app = new Appointments($schedule,$addPatient);
+
+        $addApp = $app->add();
+
+        
+        if($addPatient === true && $addApp === true ){
+            $dbh->commit();
+            header('location: /liste-patient');
+        } else {
+            $dbh->rollBack(); 
+        }
+    
 } else {
     include(dirname(__FILE__).'/../views/ajout-patient-rendez-vous.php');
 }

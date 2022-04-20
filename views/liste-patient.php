@@ -9,9 +9,14 @@
     </div>
     <div class="searchBar">
         <form action="<?=htmlspecialchars($_SERVER['PHP_SELF'])?>" method="POST">
-            <input type="text" name="search">
-            <input type="submit" value="Rechercher">
+            <input type="text" name="search" id="searchBox">
+            <!-- <input type="submit" value="Rechercher"> -->
         </form>
+        <div class="suggestions">
+            <ul id="suggestions">
+
+            </ul>
+        </div>
     </div>
 
     <?php if(!empty($_POST)){ ?>

@@ -158,15 +158,19 @@ class Patient {
      * @return bool
      */
     
-    public function add():bool{
+    public function add():int{
         try{
-            $sth = DataBase::dbConnect()->prepare('INSERT INTO `patients` (`lastname`,`firstname`,`birthdate`,`phone`,`mail`) VALUES (:lastname,:firstname,:birthDate,:phone,:mail)');
+            $db = DataBase::dbConnect();
+            $sth = $db->prepare('INSERT INTO `patients` (`lastname`,`firstname`,`birthdate`,`phone`,`mail`) VALUES (:lastname,:firstname,:birthDate,:phone,:mail)');
             $sth->bindValue(':lastname', $this->getLastname(), PDO::PARAM_STR);
             $sth->bindValue(':firstname', $this->getFirstname(), PDO::PARAM_STR);
             $sth->bindValue(':birthDate', $this->getBirthDate(), PDO::PARAM_STR);
             $sth->bindValue(':phone', $this->getPhone(), PDO::PARAM_STR);
             $sth->bindValue(':mail', $this->getMail(), PDO::PARAM_STR);
-            return $sth->execute();
+            if($sth->execute()){
+                $lastId = $db->lastInsertId();
+            } 
+            return $lastId;
         } catch (PDOException $e){
             return false;
         }
