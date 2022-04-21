@@ -28,16 +28,12 @@ if(!empty($_POST)){
 if(!empty($_GET["searchbox"]) ) 
 {   
     // the query responsible for fetch matched data
-    $sql ="SELECT *
-    FROM patients 
-    WHERE firstname 
-    LIKE '" . $_GET["searchbox"] . "%' 
-    OR lastname LIKE '" . $_GET["searchbox"] . "%'
-    LIMIT 0,$perPage;";
-    $sth = DataBase::dbConnect()->prepare($sql);
-    $sth ->execute();
-    $results = $sth->fetchAll();
-    echo json_encode($results);
+    $results = Patient::searchPatient($offset,$perPage,$_GET["searchbox"]);
+    echo json_encode(['search'=>true,'data'=>$results]);
+    die;
+} else if (empty($_GET["searchbox"]) && isset($_GET["searchbox"])) {
+    $results = Patient::searchPatient($offset,$perPage,$_GET["searchbox"]);
+    echo json_encode(['search'=>false,'data'=>$results]);
     die;
 }
 

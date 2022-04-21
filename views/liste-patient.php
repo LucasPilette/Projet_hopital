@@ -8,15 +8,16 @@
         </div>
     </div>
     <div class="searchBar">
-        <form action="<?=htmlspecialchars($_SERVER['PHP_SELF'])?>" method="POST">
-            <input type="text" name="search" id="searchBox">
+        <form action="<?=htmlspecialchars($_SERVER['PHP_SELF'])?>" method="POST" id="searchForm">
+            <input type="text" name="search" id="searchBox" autocomplete="off">
             <!-- <input type="submit" value="Rechercher"> -->
-        </form>
-        <div class="suggestions">
+            <div class="suggestions">
             <ul id="suggestions">
 
             </ul>
         </div>
+        </form>
+        
     </div>
 
     <?php if(!empty($_POST)){ ?>

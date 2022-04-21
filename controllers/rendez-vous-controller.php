@@ -5,6 +5,7 @@ require_once(dirname(__FILE__).'/../models/Patient.php');
 require_once(dirname(__FILE__).'/../models/Appointments.php');
 require_once(dirname(__FILE__).'/../config/PDO/PDO_init.php');
 
+date_default_timezone_set('Europe/Paris');
 $test = new Patient();
 $total = Patient::total();
 $patientList = $test->getAll(0,$total);
@@ -24,11 +25,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     }
 
     // CHECK DATE
-
     $date = trim(filter_input(INPUT_POST, 'date', FILTER_SANITIZE_NUMBER_INT));
-    $dateNow = date('Y-m-d');
     $dateObject = new DateTime($date);
-    $dateNowObject = new DateTime($dateNow);
+    $dateNowObject = new DateTime(date('Y-m-d'));
 
     if(empty($date)){
         $errors['date'] = ' Veuillez choisir une date pour le rendez vous ';

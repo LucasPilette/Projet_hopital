@@ -113,9 +113,8 @@ class Appointments {
         $sth ->execute();
         if(!$sth){
             throw new PDOException();
-        }
-        $appointments = $sth->fetchAll(); 
-        return $appointments;
+        } 
+        return $sth->fetchAll();
         } catch(PDOException $e){
             return [];
         }

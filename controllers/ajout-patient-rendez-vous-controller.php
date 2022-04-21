@@ -7,6 +7,7 @@ require_once(dirname(__FILE__).'/../config/PDO/PDO_init.php');
 require_once(dirname(__FILE__).'/../models/Patient.php');
 require_once(dirname(__FILE__).'/../models/Appointments.php');
 
+date_default_timezone_set('Europe/Paris');
 
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
     // PRENOM
@@ -140,8 +141,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && empty($errors)){
 
         $addApp = $app->add();
 
+
         
-        if($addPatient === true && $addApp === true ){
+        if($addPatient !== NULL && $addApp === true ){
             $dbh->commit();
             header('location: /liste-patient');
         } else {

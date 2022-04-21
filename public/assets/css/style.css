@@ -289,15 +289,19 @@ a{
 }
 
 .searchBar{
-    width: 100%;
+    width: 75%;
     display: flex;
     flex-direction: column;
     align-items: end;
-    padding-right: 17%;
 }
 
 .searchBar>form{
     width: 20%;
+}
+
+.suggestions{
+    position: absolute;
+    width: 22%;
 }
 
 #suggestions{
@@ -315,6 +319,7 @@ a{
     background-color: #20a9cb;
     cursor: pointer;
 }
+
 
 .pagination{
     display: flex;

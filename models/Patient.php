@@ -155,9 +155,10 @@ class Patient {
     
     /**
      * Création de la méthode add visant à ajouter un patient à la base de donnée
-     * @return bool
+     * @return int
      */
     
+
     public function add():int{
         try{
             $db = DataBase::dbConnect();
@@ -309,6 +310,19 @@ class Patient {
         return $patients;
     }
 
-
-
+    public static function searchPatient($offset,$perPage,$search){
+        $sql ="SELECT *
+        FROM patients 
+        WHERE firstname 
+        LIKE :search 
+        OR lastname LIKE :search
+        LIMIT :offset,:perPage;";
+        $sth = DataBase::dbConnect()->prepare($sql);
+        $sth->bindValue(':search', $search.'%', PDO::PARAM_STR);
+        $sth->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $sth->bindValue(':perPage', $perPage, PDO::PARAM_INT);
+        $sth ->execute();
+        return $sth->fetchAll();
+    }
+    
 }
