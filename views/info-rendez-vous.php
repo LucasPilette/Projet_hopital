@@ -1,4 +1,7 @@
 <div class="container">
+    <?php if(isset($error)){
+        echo $error;
+    } else {?>    
 <h2>Infos Rendez-vous</h2>
     <div class="cardUser">
         <div class="textCard">
@@ -13,4 +16,5 @@
             <img src="/public/assets/src/rdv.png" alt="">
         </div>
     </div>
+    <?php }?>
 </div>

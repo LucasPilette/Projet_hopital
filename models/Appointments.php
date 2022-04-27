@@ -1,6 +1,7 @@
 <?php
 
 require_once(dirname(__FILE__).'/../config/PDO/PDO_init.php');
+require_once(dirname(__FILE__).'/../helpers/SessionFlash.php');
 
 class Appointments {
 
@@ -96,20 +97,37 @@ class Appointments {
      * @param mixed $pdo
      * 
      */
-    public static function getAll($offset = 0,$perPage= 10){
-        $sql = 
-        'SELECT `appointments`.`id` AS appointmentsId, `appointments`.`dateHour` AS hour, `patients`.`id` AS patientsId, `patients`.`lastname` AS lastname, `patients`.`firstname` AS firstname,
-        `patients`.`mail` AS mail
-        FROM `appointments`
-        JOIN `patients`
-        ON `appointments`.`idPatients` = patients.id
-        ORDER BY `appointments`.`dateHour`
-        LIMIT :offset,:perPage;
+    public static function getAll($offset = 0,$perPage= 10,$idPatients=null){
+        if(is_null($idPatients)){
+            $sql = 
+            'SELECT `appointments`.`id` AS appointmentsId, `appointments`.`dateHour` AS hour, `patients`.`id` AS patientsId, `patients`.`lastname` AS lastname, `patients`.`firstname` AS firstname,
+            `patients`.`mail` AS mail
+            FROM `appointments`
+            JOIN `patients`
+            ON `appointments`.`idPatients` = patients.id
+            ORDER BY `appointments`.`dateHour`
+            LIMIT :offset,:perPage;
         ';
+        } else {
+            $sql = 
+            'SELECT `appointments`.`id` AS appointmentsId, `appointments`.`dateHour` AS hour, `patients`.`id` AS patientsId, `patients`.`lastname` AS lastname, `patients`.`firstname` AS firstname,
+            `patients`.`mail` AS mail
+            FROM `appointments`
+            JOIN `patients`
+            ON `appointments`.`idPatients` = patients.id
+            WHERE `appointments`.`idPatients` = :idPatients
+            ORDER BY `appointments`.`dateHour`
+            LIMIT :offset,:perPage;
+        ';
+        }
+        
         try{
             $sth = DataBase::dbConnect()->prepare($sql);
-        $sth->bindValue(':offset', $offset, PDO::PARAM_INT);
-        $sth->bindValue(':perPage', $perPage, PDO::PARAM_INT);
+            $sth->bindValue(':offset', $offset, PDO::PARAM_INT);
+            if(!is_null($idPatients)){
+                $sth->bindValue(':idPatients', $idPatients, PDO::PARAM_INT);
+            }
+            $sth->bindValue(':perPage', $perPage, PDO::PARAM_INT);
         $sth ->execute();
         if(!$sth){
             throw new PDOException();
@@ -127,7 +145,7 @@ class Appointments {
      * 
      * @return [type]
      */
-    public function getOne($id){
+    public static function getOne($id):object{
         $sql = 
         'SELECT `appointments`.`id` AS appointmentsId, `appointments`.`dateHour` AS hour, `patients`.`id` AS patientsId, `patients`.`lastname` AS lastname, `patients`.`firstname` AS firstname,
         `patients`.`mail` AS mail
@@ -139,8 +157,8 @@ class Appointments {
         $sth = DataBase::dbConnect()->prepare($sql);
         $sth->bindValue(':id',$id, PDO::PARAM_INT);
         $sth ->execute();
-        $patients = $sth->fetch(); 
-        return $patients;
+        $appointment = $sth->fetch(); 
+        return $appointment;
     }
 
     public function modifyOne($id){
@@ -156,15 +174,15 @@ class Appointments {
         return $patients;
     }
 
-    public function deleteOne($id){
+    public static function deleteOne(int $id):bool{
         $sql = 
         'DELETE FROM `appointments`  
         WHERE `appointments`.`id` = :id;';
         $sth = DataBase::dbConnect()->prepare($sql);
         $sth->bindValue(':id', $id, PDO::PARAM_INT);
-        $sth ->execute();
-        $app = $sth->fetch(); 
-        return $app;
+        $sth ->execute(); 
+        $total = $sth->rowCount();
+        return ($total <= 0) ? FALSE: TRUE; 
     }
 
     public function deleteAllFromPatient($id){

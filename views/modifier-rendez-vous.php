@@ -1,4 +1,10 @@
 <div class="addAppForm">
+    <?php 
+    if(isset($error)){
+        echo $error;
+    } else {
+    ?>
+
     <form action="<?=htmlspecialchars($_SERVER['PHP_SELF'])?>?id=<?=$_GET['id']?>" method="post" enctype="multipart/form-data">
 
         <label for="date">Date</label>
@@ -19,7 +25,6 @@
                     } else {
                         echo '<option value = "'.$patient->id.'" >'.$patient->firstname.' '.$patient->lastname.'</option>' ;
                     }
-
                 }
             ?>
         </select>
@@ -29,4 +34,5 @@
         <input type="submit" value="Modifier le rendez-vous" class="submit">
         <a href="/info-rendez-vous?id=<?=$appointmentOne->appointmentsId?>">Retour au profil</a>
     </form>
+    <?php } ?>
 </div>

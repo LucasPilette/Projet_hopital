@@ -2,6 +2,20 @@ let search = document.querySelector('#searchBox');
 let table = document.querySelector('tbody');
 let suggestions = document.querySelector('#suggestions');
 let searchForm = document.querySelector('#searchForm');
+let suppApp = document.querySelectorAll('.suppApp');
+
+
+// suppApp.forEach(element => {
+    
+//     element.addEventListener('click', (e) => {
+//         fetch(`/controllers/profil-patient-controller.php`, {
+//             method: 'POST'
+//         })
+//         .then((response) => {
+//             return response.json()
+//         })
+//     })
+// });
 
 
 search.addEventListener('keyup', (e) => {
@@ -13,7 +27,6 @@ search.addEventListener('keyup', (e) => {
             return response.json()
         })
         .then((data) => {
-            console.log(data.data)
             search.length === 0 ? null :
                 table.innerHTML = ''
             suggestions.innerHTML = ''
@@ -41,15 +54,12 @@ search.addEventListener('keyup', (e) => {
         })
         .finally( ()=>{
             let autoComplete = document.querySelectorAll('.autoComplete');
-            console.log(autoComplete)
-
             autoComplete.forEach(element => {
                 element.addEventListener('click', (e) => {
-                    // search.value = data[element.value].firstname.data[element.value].lastname
-                    // console.log(search.value);
                     search.value=e.currentTarget.id;
                     searchForm.submit();
                 })
             })
         })
 })
+

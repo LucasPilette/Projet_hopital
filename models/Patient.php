@@ -249,7 +249,7 @@ class Patient {
      * 
      * @return [type]
      */
-    public function getOne(int $id):object{
+    public static function getOne(int $id):object{
         $sql = 'SELECT * FROM `patients` WHERE `patients`.`id` = :id;';
         try{
             $sth =  DataBase::dbConnect()->prepare($sql);
@@ -283,21 +283,7 @@ class Patient {
         return $patients;
     }
 
-    public function getAppointments($id){
-        $sql = 
-        'SELECT `appointments`.`id` AS appointmentsId, `appointments`.`dateHour` AS hour, `patients`.`id` AS patientsId, `patients`.`lastname` AS lastname, `patients`.`firstname` AS firstname,
-        `patients`.`mail` AS mail
-        FROM `appointments`
-        JOIN `patients`
-        ON `appointments`.`idPatients` = `patients`.`id`
-        WHERE `appointments`.`idPatients` = :id
-        ORDER BY `appointments`.`dateHour`;';
-        $sth =  DataBase::dbConnect()->prepare($sql);
-        $sth->bindValue(':id', $id, PDO::PARAM_INT);
-        $sth ->execute();
-        $patients = $sth->fetchAll(); 
-        return $patients;
-    }
+
 
 
     public function deletePatient($id){

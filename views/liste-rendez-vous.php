@@ -1,3 +1,4 @@
+<?=SessionFlash::display('message')?>
 <div class="container">
     <div class="headContainer">
         <h2>Liste rendez-vous :</h2>

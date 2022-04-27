@@ -42,7 +42,7 @@
                     <td><a href="tel:<?=$result->phone?>"><?=$result->phone?></a></td>
                     <td><a href="mailto:<?=$result->mail?>"><?=$result->mail?></a></td>
                     <td class ="activeCase"><a href="/profil-patient?id=<?=$result->id?>"> Voir le profil </a></td>
-                    <td class="delete"><a href="/supprimer-patient?id=<?=$result->id?>">Supprimer le patient</a> </td>
+                    <td class="delete suppApp"><a href="/supprimer-patient?id=<?=$result->id?>">Supprimer le patient</a> </td>
             </tr>
             <?php } ?>
         </tbody>

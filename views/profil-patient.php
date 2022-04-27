@@ -1,3 +1,4 @@
+<?=SessionFlash::display('message')?>
 <div class="container" id="profile">
     <div class="cardUser">
         <div class="textCard">
@@ -20,12 +21,16 @@
             <th>ID</th>
             <th>Date</th>
             <th>Heure</th>
+            <th></th>
         </thead>
         <tbody>
             <?php
                 foreach($appList as $app){
-                    echo '<tr><td>'.$app->appointmentsId.'</td><td>'.date('j M Y', strtotime($app->hour)).'</td><td>'.
-                    date('H:i', strtotime($app->hour)).'</td></tr>';
+                    echo '<tr><td>'.$app->appointmentsId.'</td>
+                    <td>'.date('j M Y', strtotime($app->hour)).'</td>
+                    <td>'.date('H:i', strtotime($app->hour)).'</td>
+                    <td class="delete"><a href="/supprimer-rendez-vous?id='.$app->appointmentsId.'">Supprimer</a>   </td>
+                    </tr>';
                 }
             ?> 
         </tbody>

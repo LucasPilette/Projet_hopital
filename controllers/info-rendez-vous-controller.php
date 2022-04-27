@@ -8,9 +8,10 @@ require_once(dirname(__FILE__).'/../models/Appointments.php');
 
 
 if(!empty($_GET)){
-    $id = trim(filter_input(INPUT_GET,'id',FILTER_SANITIZE_SPECIAL_CHARS));
-    $appointment = new Appointments();
-    $appointmentInfos = $appointment->getOne($id);
+    $id = trim(filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT));
+    $appointmentInfos = Appointments::getOne($id);
+} else {
+    $error = 'Pas de rendez-vous avec cet ID.';
 }
 
 // AFFICHAGE DES VUES

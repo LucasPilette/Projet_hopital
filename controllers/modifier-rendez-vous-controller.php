@@ -7,10 +7,11 @@ require_once(dirname(__FILE__).'/../config/PDO/PDO_init.php');
 
 if(!empty($_GET)){
     $id = trim(filter_input(INPUT_GET,'id',FILTER_SANITIZE_SPECIAL_CHARS));
-    $appointment = new Appointments();
-    $appointmentOne = $appointment->getOne($id);
-    $test = new Patient();
-    $patientList = $test->getAll();
+    $appointmentOne = Appointments::getOne($id);
+    $total = Patient::total();
+    $patientList = Patient::getAll(0,$total);
+} else {
+    $error = 'Patient non trouvé';
 }
 
 
@@ -57,9 +58,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
             if(!$scheduleChecked){
                 $errors['shedule'] = 'Veuillez choisir un créneau valide';
             }
-
 }
-
 
 
 
@@ -78,3 +77,4 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && empty($errors)){
 }
 
 include(dirname(__FILE__).'/../views/templates/footer.php');
+
