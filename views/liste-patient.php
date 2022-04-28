@@ -9,7 +9,7 @@
     </div>
     <div class="searchBar">
         <form action="<?=htmlspecialchars($_SERVER['PHP_SELF'])?>" method="POST" id="searchForm">
-            <input type="text" name="search" id="searchBox" autocomplete="off">
+            <input type="text" name="search" id="searchBox" autocomplete="off" value="<?=$search ?? ''?>">
             <!-- <input type="submit" value="Rechercher"> -->
             <div class="suggestions">
             <ul id="suggestions">
